@@ -58,6 +58,8 @@
           class="avatar-uploader"
           action="http://localhost:8501/admin/system/fileUpload"
           :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :headers="headers"
         >
           <img v-if="sysUser.avatar" :src="sysUser.avatar" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
@@ -220,7 +222,7 @@ const editSysUser = (row) => {
 
 
 
-////////////////////////// 删除用户
+////////////////////////////// 删除用户
 const deleteById = (row)=>{
   ElMessageBox.confirm('此操作将永久删除该记录, 是否继续?', 'Warning', {
     confirmButtonText: '确定',
@@ -233,6 +235,21 @@ const deleteById = (row)=>{
       fetchData()
     }
   })
+}
+
+
+
+
+///////////////////////////用户头像上传
+import { useApp } from '@/pinia/modules/app'
+
+const headers = {
+  token: useApp().authorization.token     // 从pinia中获取token，在进行文件上传的时候将token设置到请求头中
+}
+
+// 图像上传成功以后的事件处理函数
+const handleAvatarSuccess = (response, uploadFile) => {
+  sysUser.value.avatar = response.data
 }
 
 </script>
