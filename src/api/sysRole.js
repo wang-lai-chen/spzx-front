@@ -23,3 +23,13 @@ export const SaveSysRole = (sysRole) => {
     data: sysRole,
   })
 }
+
+
+// 保存修改
+export const UpdateSysRole = (sysRole) => {
+  return request({
+    url: `${base_api}/updateSysRole`,
+    method: 'put',
+    data: sysRole,
+  })
+}

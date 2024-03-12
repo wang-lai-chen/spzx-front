@@ -44,8 +44,8 @@
       <el-table-column prop="roleName" label="角色名称" width="180"/>
       <el-table-column prop="roleCode" label="角色code" width="180"/>
       <el-table-column prop="createTime" label="创建时间"/>
-      <el-table-column label="操作" align="center" width="280">
-        <el-button type="primary" size="small">
+      <el-table-column label="操作" align="center" width="280" #default="scope">
+        <el-button type="primary" size="small" @click="editShow(scope.row)">
           修改
         </el-button>
         <el-button type="danger" size="small">
@@ -70,7 +70,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { GetSysRoleListByPage, SaveSysRole } from '@/api/sysRole';
+import { GetSysRoleListByPage, SaveSysRole, UpdateSysRole } from '@/api/sysRole';
 import {ElMessage} from "element-plus";
 
 // 分页条总记录数
@@ -126,14 +126,32 @@ const defaultForm = {
 }
 const sysRole = ref(defaultForm)   // 使用ref包裹该对象，使用reactive不方便进行重置
 
-// 添加角色
+// 添加/修改角色信息
 const submit = async () => {
-  const { code } = await SaveSysRole(sysRole.value) ;
-  if(code === 200) {
-    dialogVisible.value = false
-    ElMessage.success('操作成功')
-    fetchData()
+  if(!sysRole.value.id) {
+    const { code } = await SaveSysRole(sysRole.value) ;
+    if(code === 200) {
+      dialogVisible.value = false
+      ElMessage.success('添加数据操作成功')
+      fetchData()
+    }
+  }else {
+    const { code } = await UpdateSysRole(sysRole.value) ;
+    if(code === 200) {
+      dialogVisible.value = false
+      ElMessage.success('更新数据操作成功')
+      fetchData()
+    }
   }
+}
+
+
+
+// 修改按钮点击事件处理函数(数据回显)
+const editShow = (row) => {
+  // 对象拓展运算符
+  sysRole.value = {...row}
+  dialogVisible.value = true
 }
 </script>
 
