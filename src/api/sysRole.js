@@ -33,3 +33,12 @@ export const UpdateSysRole = (sysRole) => {
     data: sysRole,
   })
 }
+
+
+// 删除角色
+export const DeleteSysRoleById = (roleId) => {
+  return request({
+    url: `${base_api}/deleteById/${roleId}`,
+    method: 'delete',
+  })
+}
