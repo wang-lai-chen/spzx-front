@@ -3,7 +3,7 @@ import request from '@/utils/request'
 const base_api = '/admin/system/sysRole'
 
 // 分页查询角色数据
-export const GetSysRoleListByPage = (current , limit , queryDto) => {
+export const GetSysRoleListByPage = (current, limit, queryDto) => {
   return request({
     // ``模版字符串
     url: `${base_api}/findByPage/${current}/${limit}`,  // 路径
@@ -40,5 +40,14 @@ export const DeleteSysRoleById = (roleId) => {
   return request({
     url: `${base_api}/deleteById/${roleId}`,
     method: 'delete',
+  })
+}
+
+
+// 查询所有的角色数据
+export const GetAllRoleList = () => {
+  return request({
+    url: `${base_api}/findAllRoles`,
+    method: 'get'
   })
 }

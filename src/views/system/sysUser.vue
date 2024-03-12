@@ -95,11 +95,34 @@
       <el-button type="danger" size="small" @click="deleteById(scope.row)">
         删除
       </el-button>
-      <el-button type="warning" size="small">
+      <el-button type="warning" size="small" @click="showAssignRole(scope.row)">
         分配角色
       </el-button>
     </el-table-column>
   </el-table>
+
+<!--  显示所有角色-->
+  <el-dialog v-model="dialogRoleVisible" title="分配角色" width="40%">
+    <el-form label-width="80px">
+      <el-form-item label="用户名">
+        <el-input disabled :value="sysUser.userName"></el-input>
+      </el-form-item>
+
+      <el-form-item label="角色列表">
+        <el-checkbox-group v-model="userRoleIds">
+          <el-checkbox v-for="role in allRoles" :key="role.id" :label="role.id">
+            {{ role.roleName }}
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary">提交</el-button>
+        <el-button @click="dialogRoleVisible = false">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+
 
   <el-pagination
     v-model:current-page="pageParams.page"
@@ -118,6 +141,7 @@
 import {ref, onMounted} from 'vue';
 import {GetSysUserListByPage, SaveSysUser, UpdateSysUser, DeleteSysUserById} from '@/api/sysUser';
 import {ElMessageBox, ElMessage} from "element-plus";
+import {GetAllRoleList} from "@/api/sysRole";
 
 // 表格数据模型
 const list = ref([]);
@@ -250,6 +274,20 @@ const headers = {
 // 图像上传成功以后的事件处理函数
 const handleAvatarSuccess = (response, uploadFile) => {
   sysUser.value.avatar = response.data
+}
+
+
+
+//////////////////////////////为用户分配角色
+const userRoleIds = ref([])
+const allRoles = ref([])
+const dialogRoleVisible = ref(false)
+const showAssignRole = async row => {
+  sysUser.value = {...row}
+  dialogRoleVisible.value = true
+
+  const {data} = await GetAllRoleList()
+  allRoles.value = data.allRolesList
 }
 
 </script>
