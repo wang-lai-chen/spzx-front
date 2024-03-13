@@ -117,7 +117,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="doAssign">提交</el-button>
         <el-button @click="dialogRoleVisible = false">取消</el-button>
       </el-form-item>
     </el-form>
@@ -139,7 +139,7 @@
 <script setup>
 
 import {ref, onMounted} from 'vue';
-import {GetSysUserListByPage, SaveSysUser, UpdateSysUser, DeleteSysUserById} from '@/api/sysUser';
+import {GetSysUserListByPage, SaveSysUser, UpdateSysUser, DeleteSysUserById, DoAssignRoleToUser} from '@/api/sysUser';
 import {ElMessageBox, ElMessage} from "element-plus";
 import {GetAllRoleList} from "@/api/sysRole";
 
@@ -288,6 +288,20 @@ const showAssignRole = async row => {
 
   const {data} = await GetAllRoleList()
   allRoles.value = data.allRolesList
+}
+
+// 分配角色
+const doAssign = async ()=>{
+  let assignRoleVo = {
+    userId: sysUser.value.id,
+    roleIdList: userRoleIds.value
+  }
+  const {code} = await DoAssignRoleToUser(assignRoleVo)
+  if (code === 200) {
+    dialogRoleVisible.value = false
+    ElMessage.success("操作成功~")
+    fetchData()
+  }
 }
 
 </script>
