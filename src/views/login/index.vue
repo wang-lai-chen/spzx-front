@@ -119,7 +119,7 @@ export default defineComponent({
 
     const state = reactive({
       model: {
-        userName: 'admin',
+        userName: 'A宝',
         password: '111111',
         captcha: '',      // 用户输入的验证码
         codeKey: ''       // 后端返回的验证码key
