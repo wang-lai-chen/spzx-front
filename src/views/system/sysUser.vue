@@ -283,11 +283,16 @@ const userRoleIds = ref([])
 const allRoles = ref([])
 const dialogRoleVisible = ref(false)
 const showAssignRole = async row => {
-  sysUser.value = {...row}
+  sysUser.value = row
   dialogRoleVisible.value = true
 
-  const {data} = await GetAllRoleList()
+  // 查询所有的角色数据
+  const {data} = await GetAllRoleList(row.id) ;
   allRoles.value = data.allRolesList
+
+  // 获取当前登录用户的角色数据
+  userRoleIds.value = data.sysUserRoles
+
 }
 
 // 分配角色
