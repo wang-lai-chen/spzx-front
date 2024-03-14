@@ -35,3 +35,12 @@ export const DeleteBrandById = id => {
     method: 'delete',
   })
 }
+
+
+// 查询所有的品牌数据
+export const FindAllBrand = () => {
+  return request({
+    url: `${base_api}/findAll`,
+    method: 'get',
+  })
+}
