@@ -9,7 +9,7 @@
       <el-form-item label="分类文件">
         <el-upload
           class="upload-demo"
-          action="http://192.168.160.129:8501/admin/product/category/importData"
+          action="http://localhost:8501/admin/product/category/importData"
           :on-success="onUploadSuccess"
           :headers="headers"
         >
