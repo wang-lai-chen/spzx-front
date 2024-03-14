@@ -84,7 +84,7 @@
       <el-button type="primary" size="small" @click="editShow(scope.row)">
         修改
       </el-button>
-      <el-button type="danger" size="small">
+      <el-button type="danger" size="small" @click="remove(scope.row.id)">
         删除
       </el-button>
     </el-table-column>
@@ -244,6 +244,22 @@ const updateData = async () => {
 }
 
 ////////////////////////////////分类品牌删除
+//删除
+const remove = async id => {
+  ElMessageBox.confirm('此操作将永久删除该记录, 是否继续?', 'Warning', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await DeleteCategoryBrandById(id)
+      ElMessage.success('删除成功')
+      fetchData()
+    })
+    .catch(() => {
+      ElMessage.info('取消删除')
+    })
+}
 
 </script>
 
