@@ -16,8 +16,10 @@
           :on-success="handleAvatarSuccess"
           :headers="headers"
         >
-          <img v-if="brand.logo" :src="brand.logo" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          <img v-if="brand.logo" :src="brand.logo" class="avatar"/>
+          <el-icon v-else class="avatar-uploader-icon">
+            <Plus/>
+          </el-icon>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -28,16 +30,16 @@
   </el-dialog>
 
   <el-table :data="list" style="width: 100%">
-    <el-table-column prop="name" label="品牌名称" />
+    <el-table-column prop="name" label="品牌名称"/>
     <el-table-column prop="logo" label="品牌图标" #default="scope">
-      <img :src="scope.row.logo" width="50" />
+      <img :src="scope.row.logo" width="50"/>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" />
+    <el-table-column prop="createTime" label="创建时间"/>
     <el-table-column label="操作" align="center" width="200" #default="scope">
       <el-button type="primary" size="small" @click="editShow(scope.row)">
         修改
       </el-button>
-      <el-button type="danger" size="small">
+      <el-button type="danger" size="small" @click="remove(scope.row.id)">
         删除
       </el-button>
     </el-table-column>
@@ -57,9 +59,9 @@
 
 <script setup>
 import {onMounted, ref} from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 import {GetBrandPageList, DeleteBrandById, SaveBrand, UpdateBrandById} from "@/api/brand";
-import { useApp } from '@/pinia/modules/app'
+import {useApp} from '@/pinia/modules/app'
 ////////////////////////////////品牌数据分页
 // 定义表格数据模型
 const list = ref([])
@@ -75,18 +77,18 @@ const pageParamsFrom = {
 const pageParams = ref(pageParamsFrom)
 
 // 钩子函数
-onMounted(()=>{
+onMounted(() => {
   fetchData()
 })
 
 // 页面变化
-const handleSizeChange = size =>{
+const handleSizeChange = size => {
   pageParams.value.limit = size
   fetchData()
 }
 
 // 分页查询
-const fetchData = async ()=>{
+const fetchData = async () => {
   const {data} = await GetBrandPageList(pageParams.value.page, pageParams.value.limit)
   list.value = data.list
   total.value = data.total
@@ -150,6 +152,18 @@ const updateData = async () => {
   fetchData()
 }
 ////////////////////////////////品牌数据删除
+const remove = async id => {
+  ElMessageBox.confirm('此操作将永久删除该记录, 是否继续?', 'Warning', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await DeleteBrandById(id)
+      ElMessage.success('删除成功')
+      fetchData()
+    })
+}
 
 </script>
 
