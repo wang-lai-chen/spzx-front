@@ -107,7 +107,7 @@ const total = ref(0)
 //分页条数据模型
 const pageParamsForm = {
   page: 1, // 页码
-  limit: 10, // 每页记录数
+  limit: 3, // 每页记录数
 }
 const pageParams = ref(pageParamsForm)
 
@@ -140,7 +140,7 @@ const productSpec = ref(defaultForm)
 
 //进入修改
 const editShow = row => {
-  productSpec.value = row
+  productSpec.value = {...row}
   dialogVisible.value = true
 }
 
